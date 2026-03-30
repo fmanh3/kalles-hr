@@ -16,7 +16,7 @@ describe('DailyRestPolicy', () => {
   it('should throw Error if rest is less than 11 hours', () => {
     const lastShiftEndTime = new Date('2026-03-26T00:00:00Z');
     const proposedShiftStartTime = new Date('2026-03-26T10:00:00Z'); // Only 10 hours
-    expect(() => DailyRestPolicy.evaluate(lastShiftEndTime, proposedShiftStartTime)).toThrowError(
+    expect(() => DailyRestPolicy.evaluate(lastShiftEndTime, proposedShiftStartTime)).toThrow(
       /Insufficient Rest/
     );
   });
