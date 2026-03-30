@@ -11,20 +11,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout kalles-hr
       uses: actions/checkout@v4
+      with:
+        path: kalles-hr
+
+    - name: Checkout kalles-traffic (for pubsub client)
+      uses: actions/checkout@v4
+      with:
+        repository: fmanh3/kalles-traffic
+        path: kalles-traffic
 
     - name: Use Node.js 22.x
       uses: actions/setup-node@v4
       with:
         node-version: '22.x'
-        cache: 'npm'
 
     - name: Install dependencies
       run: npm ci
+      working-directory: ./kalles-hr
 
     - name: Build TypeScript
       run: npm run build
+      working-directory: ./kalles-hr
 
     - name: Run tests
       run: npm test
+      working-directory: ./kalles-hr
