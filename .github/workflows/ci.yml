@@ -14,27 +14,41 @@ jobs:
     - name: Checkout kalles-hr
       uses: actions/checkout@v4
       with:
-        path: kalles-hr
+        path: kalles-buss/kalles-hr
 
     - name: Checkout kalles-traffic (for pubsub client)
       uses: actions/checkout@v4
       with:
         repository: fmanh3/kalles-traffic
-        path: kalles-traffic
+        path: kalles-buss/kalles-traffic
+
+    - name: Checkout kalles-finance (for shared schemas)
+      uses: actions/checkout@v4
+      with:
+        repository: fmanh3/kalles-finance
+        path: kalles-buss/kalles-finance
 
     - name: Use Node.js 22.x
       uses: actions/setup-node@v4
       with:
         node-version: '22.x'
 
-    - name: Install dependencies
+    - name: Install Traffic dependencies
       run: npm ci
-      working-directory: ./kalles-hr
+      working-directory: kalles-buss/kalles-traffic
+
+    - name: Install Finance dependencies
+      run: npm ci
+      working-directory: kalles-buss/kalles-finance
+
+    - name: Install HR dependencies
+      run: npm ci
+      working-directory: kalles-buss/kalles-hr
 
     - name: Build TypeScript
       run: npm run build
-      working-directory: ./kalles-hr
+      working-directory: kalles-buss/kalles-hr
 
     - name: Run tests
       run: npm test
-      working-directory: ./kalles-hr
+      working-directory: kalles-buss/kalles-hr
