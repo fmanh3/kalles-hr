@@ -1,8 +1,16 @@
 import { PubSubClient } from '../../kalles-traffic/src/infrastructure/messaging/pubsub-client';
+import express from 'express';
 import { ShiftAssignmentRequestedSchema, type ShiftAssignmentRequested } from './domain/events/shift-events';
 import { DailyRestPolicy } from './domain/policies/daily-rest-policy';
 
 async function start() {
+  // Start a minimal heartbeat server for Cloud Run health checks
+  const app = express();
+  const port = process.env.PORT || 8080;
+  app.get('/', (req, res) => res.send('Kalles HR Service is running! 👥'));
+  app.get('/health', (req, res) => res.send('OK'));
+  app.listen(port, () => console.log(`[Health] Heartbeat server listening on port ${port}`));
+
   const pubsub = new PubSubClient();
   const HR_TOPIC = 'hr-events';
   const SUB_NAME = 'hr-guardrails-sub';
