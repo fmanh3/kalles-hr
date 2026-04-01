@@ -1,25 +1,18 @@
-import { differenceInHours } from 'date-fns';
-
-/**
- * Policy: "Minst 11 timmars dygnsvila mellan arbetspass"
- * Ref: kalles-governance/policies/personal-hr/policy-dygnsvila.md
- */
 export class DailyRestPolicy {
-  private static MINIMUM_REST_HOURS = 11;
+  private static readonly REQUIRED_REST_HOURS = 11;
 
   /**
-   * Utvärderar om en förare har fått tillräckligt med vila innan ett nytt pass.
-   * @param lastShiftEndTime Tidpunkten då det senaste passet avslutades.
-   * @param proposedShiftStartTime Tidpunkten då det nya passet föreslås starta.
-   * @returns true om policyn uppfylls, kastar Error annars.
+   * Utvärderar om en förare har fått tillräcklig dygnsvila.
+   * @param lastShiftEndTime Sluttid för föregående pass
+   * @param proposedStartTime Starttid för föreslaget nytt pass
+   * @throws Error om vilan är för kort
    */
-  public static evaluate(lastShiftEndTime: Date, proposedShiftStartTime: Date): boolean {
-    const hoursOfRest = differenceInHours(proposedShiftStartTime, lastShiftEndTime);
+  static evaluate(lastShiftEndTime: Date, proposedStartTime: Date): boolean {
+    const restDurationMs = proposedStartTime.getTime() - lastShiftEndTime.getTime();
+    const restDurationHours = restDurationMs / (1000 * 60 * 60);
 
-    if (hoursOfRest < this.MINIMUM_REST_HOURS) {
-      throw new Error(
-        `Policy Violation: Insufficient Rest. Driver only had ${hoursOfRest} hours of rest. Minimum required is ${this.MINIMUM_REST_HOURS} hours.`
-      );
+    if (restDurationHours < this.REQUIRED_REST_HOURS) {
+      throw new Error(`Insufficient Daily Rest (${restDurationHours.toFixed(1)}h < ${this.REQUIRED_REST_HOURS}h required)`);
     }
 
     return true;
