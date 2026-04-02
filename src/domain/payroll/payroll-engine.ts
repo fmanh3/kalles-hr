@@ -60,7 +60,7 @@ export class PayrollEngine {
   }
 
   private parseTimeToMinutes(timeStr: string): number {
-    const [hours, minutes] = timeStr.split(':').map(Number);
+    const [hours = 0, minutes = 0] = timeStr.split(':').map(Number);
     return hours * 60 + minutes;
   }
 }
