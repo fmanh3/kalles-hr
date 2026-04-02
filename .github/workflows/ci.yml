@@ -34,15 +34,15 @@ jobs:
         node-version: '22.x'
 
     - name: Install Traffic dependencies
-      run: npm ci
+      run: npm install --legacy-peer-deps
       working-directory: kalles-buss/kalles-traffic
 
     - name: Install Finance dependencies
-      run: npm ci
+      run: npm install --legacy-peer-deps
       working-directory: kalles-buss/kalles-finance
 
     - name: Install HR dependencies
-      run: npm ci
+      run: npm install --legacy-peer-deps
       working-directory: kalles-buss/kalles-hr
 
     - name: Build TypeScript
