@@ -1,17 +1,12 @@
+# Simple robust Dockerfile for HR
 FROM node:22-alpine
-
 WORKDIR /app
-
-# Install dependencies for the specific service
-WORKDIR /app/kalles-hr
-COPY kalles-hr/package*.json ./
-RUN npm install --legacy-peer-deps
-
-# Copy the entire monorepo so cross-repo relative imports work
-WORKDIR /app
+COPY .env ./
+COPY kalles-hr/package*.json ./kalles-hr/
+COPY kalles-traffic/package*.json ./kalles-traffic/
+RUN cd kalles-hr && npm install --legacy-peer-deps
 COPY kalles-hr ./kalles-hr
-COPY kalles-finance ./kalles-finance
 COPY kalles-traffic ./kalles-traffic
-
 WORKDIR /app/kalles-hr
-CMD ["npm", "start"]
+
+CMD ["npx", "ts-node", "src/index.ts"]

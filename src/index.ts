@@ -1,4 +1,4 @@
-import { PubSubClient } from '../../kalles-traffic/src/infrastructure/messaging/pubsub-client';
+import { HRPubSubClient } from './infrastructure/messaging/hr-pubsub-client';
 import express from 'express';
 import Knex from 'knex';
 import config from '../knexfile';
@@ -8,7 +8,7 @@ import { RosteringAgent } from './domain/planning/rostering-agent';
 
 async function start() {
   const db = Knex(config.development!);
-  const pubsub = new PubSubClient();
+  const pubsub = new HRPubSubClient();
   const rosteringAgent = new RosteringAgent(db);
 
   // Auto-seed DRIVER-007 for stable testing
